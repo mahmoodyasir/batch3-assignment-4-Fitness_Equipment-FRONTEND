@@ -26,7 +26,7 @@ const Header = () => {
 
   const tabBar = [
     { name: "HOME", icon: <AiOutlineHome />, url: "/" },
-    { name: "PRODUCTS", icon: <FiShoppingBag />, url: "/product" },
+    { name: "PRODUCTS", icon: <FiShoppingBag />, url: "/products" },
     { name: "PRODUCT MANAGEMENT", icon: <TfiWrite />, url: "/blog" },
     { name: "ABOUT US", icon: <InfoIcon />, url: "/about_us" },
   ];
@@ -120,7 +120,7 @@ const Header = () => {
       </AppBar>
 
       <Drawer anchor="left" open={isMenu} onClose={() => setIsMenu(false)}>
-        <section className="bg-gray-700" style={{ height: "3.5rem", backgroundColor: "rgb(55 65 81)" }}>
+        <section className="bg-gray-700" style={{ height: "3.5rem" }}>
           <Typography style={{ color: "white", padding: "15px" }}>
             {" "}
             Hello User
