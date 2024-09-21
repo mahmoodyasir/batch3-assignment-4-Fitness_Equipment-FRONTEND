@@ -67,7 +67,7 @@ const ProductCard = (props: Props) => {
                     {
                         <div id="imgbtn" className="hidden hover:block absolute bottom-0 w-full">
                             <div className="flex w-full">
-                                <button onClick={() => { }} className=" bg-green-400 text-white hover:bg-green-700 border-black bg-opacity-80 py-3 px-3 w-full">SEE DETAILS</button>
+                                <button onClick={() => { navigate(`/product_details/${item?._id}`) }} className=" bg-green-400 text-white hover:bg-green-700 border-black bg-opacity-80 py-3 px-3 w-full">SEE DETAILS</button>
                             </div>
                         </div>
                     }

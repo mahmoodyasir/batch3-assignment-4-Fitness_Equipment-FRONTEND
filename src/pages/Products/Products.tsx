@@ -1,29 +1,20 @@
 import { Button, Checkbox, Drawer, FormControlLabel, FormGroup, Pagination, Slider, TextField, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { filterTypes, noNegative } from '../../utils/utils';
+import React, { useContext, useEffect, useState } from 'react'
+import { filterTypes, ITEM_PER_PAGE, MAX_PRICE_LIMIT, noNegative } from '../../utils/utils';
 import Radio from '@mui/material/Radio';
 import { getAllProduct } from '../../ApiGateways/product';
 import { useAppDispatch, useAppSelector } from '../../Redux/app/hooks';
 import { setProducts } from '../../Redux/features/productSlice';
 import ProductCard from '../../components/ProductCard/ProductCard';
-
-const MAX_PRICE_LIMIT = 1000000;
-const ITEM_PER_PAGE = 12;
+import { Context } from '../../state/Provider';
 
 
-type FilterProps = {
-  reset: boolean;
-  setReset: React.Dispatch<React.SetStateAction<boolean>>;
+const FilterTab = () => {
 
-  filters: filterTypes
-  setFilters: React.Dispatch<React.SetStateAction<filterTypes>>;
-}
+  const { filters, setFilters } = useContext(Context);
+  
 
-const FilterTab = (props: FilterProps) => {
-
-  const { reset, setReset, filters, setFilters } = props;
-
-  const categories = ["category 1", "category 2", "category 3", "category 4", "category 5", "category 6"];
+  const categories = ["cable machines", "dumbbells", "elliptical", "treadmill", "barbell", "bench"];
 
 
   const handlePriceRangeChange = (event: Event, newValue: number | number[]) => {
@@ -203,36 +194,51 @@ const FilterTab = (props: FilterProps) => {
 const Products = () => {
 
   const dispatch = useAppDispatch();
+
   const all_products = useAppSelector((state) => state.productState);
+  const [debounceTimeout, setDebounceTimeout] = useState<number>();
+
+  const { filters, setFilters } = useContext(Context);
 
   const [openFilter, setOpenFilter] = useState(false);
   const [reset, setReset] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
-  const [filters, setFilters] = useState<filterTypes>({
-    search: "",
-    categories: [],
-    minPrice: 0,
-    maxPrice: MAX_PRICE_LIMIT,
-    sortOrder: ""
-  })
 
   useEffect(() => {
-    getAllProduct(page, ITEM_PER_PAGE, filters,
-      (data) => {
-        dispatch(setProducts(data?.data));
-        setPage(data?.data?.page);
-        setTotalPage(data?.data?.total_pages)
-      },
-      res => console.log(res)
-    )
-  }, [page]);
 
-  console.log(filters)
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    const timeoutId = setTimeout(() => {
+      getAllProduct(page, ITEM_PER_PAGE, false, filters,
+        (data) => {
+          dispatch(setProducts(data?.data));
+          setPage(data?.data?.page);
+          setTotalPage(data?.data?.total_pages)
+        },
+        res => console.log(res)
+      )
+    }, 1000);
+
+    setDebounceTimeout(timeoutId);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+
+    
+  }, [page, filters]);
+
 
   return (
     <div className='px-4'>
+
+      <div className='mt-8 block lg:hidden'>
+        <Button onClick={() => setOpenFilter(true)} className=' bg-black opacity-80 hover:bg-green-400 text-white rounded-lg px-5'>Filter Option</Button>
+      </div>
       <div className="grid grid-cols-4 gap-x-8 my-8" >
         <Drawer
           anchor="bottom"
@@ -246,21 +252,11 @@ const Products = () => {
             }
           }}
         >
-          <FilterTab
-            reset={reset}
-            setReset={setReset}
-            filters={filters}
-            setFilters={setFilters}
-          />
+          <FilterTab/>
         </Drawer>
 
         <article className="hidden lg:block col-span-1 row-span-4" >
-          <FilterTab
-            reset={reset}
-            setReset={setReset}
-            filters={filters}
-            setFilters={setFilters}
-          />
+          <FilterTab />
         </article>
 
         <article className="col-span-4 lg:col-span-3 flex flex-col gap-12 items-center">
