@@ -2,11 +2,9 @@ import React, { useContext, useState } from "react";
 
 import { AiOutlineHome, AiOutlineMenu } from "react-icons/ai";
 import { FiShoppingBag } from "react-icons/fi";
-import { GiHealthPotion } from "react-icons/gi";
 import { TfiWrite } from "react-icons/tfi";
 import InfoIcon from '@mui/icons-material/Info';
 import SearchIcon from "@mui/icons-material/Search";
-import SecurityIcon from '@mui/icons-material/Security';
 import { AppBar, Badge, Button, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import { ShoppingCartOutlined } from "@mui/icons-material";
 import SearchBar from "../SearchBar/SearchBar";
@@ -28,11 +26,9 @@ const Header = () => {
 
   const tabBar = [
     { name: "HOME", icon: <AiOutlineHome />, url: "/" },
-    { name: "SHOP", icon: <FiShoppingBag />, url: "/product" },
-    { name: "BLOG", icon: <TfiWrite />, url: "/blog" },
-    { name: "SKINCARE ASSIST", icon: <GiHealthPotion />, url: "/scincare" },
+    { name: "PRODUCTS", icon: <FiShoppingBag />, url: "/product" },
+    { name: "PRODUCT MANAGEMENT", icon: <TfiWrite />, url: "/blog" },
     { name: "ABOUT US", icon: <InfoIcon />, url: "/about_us" },
-    { name: "PRIVACY POLICY", icon: <SecurityIcon />, url: "/privacy_policy" },
   ];
 
   return (
@@ -108,12 +104,12 @@ const Header = () => {
           </section>
         </Toolbar>
 
-        <section className="flex gap-2 bg-amber-50 pl-4 content-center items-center hidden md:block">
+        <section className="flex gap-2 bg-gray-700 pl-4 content-center items-center hidden md:block">
          
           {tabBar?.map((item, i) => (
             <Button
               key={i}
-              className="text-black text-md md:text-base"
+              className="text-white text-md md:text-base"
               onClick={() => navigate(item?.url)}
             >
               {item?.name}
@@ -124,8 +120,8 @@ const Header = () => {
       </AppBar>
 
       <Drawer anchor="left" open={isMenu} onClose={() => setIsMenu(false)}>
-        <section style={{ height: "3.5rem", backgroundColor: "rgb(255 251 235)" }}>
-          <Typography style={{ color: "black", padding: "15px" }}>
+        <section className="bg-gray-700" style={{ height: "3.5rem", backgroundColor: "rgb(55 65 81)" }}>
+          <Typography style={{ color: "white", padding: "15px" }}>
             {" "}
             Hello User
           </Typography>
