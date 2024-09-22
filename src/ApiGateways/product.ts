@@ -33,7 +33,7 @@ export const getAllProduct = async (
 
 
 export const getProductDetails = async (
-    id:string,
+    id: string,
     handleSuccess: (data?: any) => void,
     handleError: (err?: any) => void
 ) => {
@@ -56,3 +56,27 @@ export const getProductDetails = async (
         handleError(err)
     }
 }
+
+
+export const insertProduct = async (
+    body: any,
+    handleSuccess: (data?: any) => void,
+    handleError: (err?: any) => void
+) => {
+
+    try {
+        const response = await fetch(`${url}/api/product/create-product`,
+            {
+                method: 'POST',
+                body,
+
+            });
+
+        const jsonData = await response.json();
+        if (response.status === 200) handleSuccess(jsonData);
+        else handleError(jsonData);
+    }
+    catch (err) {
+        handleError(err)
+    }
+};

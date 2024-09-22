@@ -23,7 +23,16 @@ export type filterTypes = {
     minPrice: number | null;
     maxPrice: number | null;
     sortOrder: string | null;
-}
+};
+
+
+export type BasicInfo = {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    address: string;
+};
 
 export const noNegative = (value: number) => {
     if (value > 0) return Number(value);

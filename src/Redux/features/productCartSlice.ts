@@ -39,7 +39,7 @@ const cartSlice = createSlice({
 
         increaseCartItem: (state, action: PayloadAction<string>) => {
             const productId = action.payload;
-            if (state[productId] && state[productId].quantity <= state[productId].product.stock_quantity) {
+            if (state[productId] && state[productId].quantity < state[productId].product.stock_quantity) {
                 state[productId].quantity += 1;
                 state[productId].total_price += state[productId].product.price;
             }

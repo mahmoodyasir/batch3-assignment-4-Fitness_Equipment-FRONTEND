@@ -5,14 +5,17 @@ import './index.css'
 import { StyledEngineProvider } from "@mui/material";
 import { GlobalStateProvider } from './state/Provider.tsx';
 import { Provider } from 'react-redux';
-import { store } from './Redux/app/store.ts';
+import { persistor, store } from './Redux/app/store.ts';
+import { PersistGate } from 'redux-persist/integration/react';
 
 createRoot(document.getElementById('root')!).render(
   <GlobalStateProvider>
     <StrictMode>
       <StyledEngineProvider injectFirst>
         <Provider store={store}>
-          <App />
+        <PersistGate persistor={persistor}>
+        <App />
+        </PersistGate>
         </Provider>
       </StyledEngineProvider>
     </StrictMode>

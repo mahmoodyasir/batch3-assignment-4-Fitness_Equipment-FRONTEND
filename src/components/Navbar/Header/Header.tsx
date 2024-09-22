@@ -10,9 +10,12 @@ import { ShoppingCartOutlined } from "@mui/icons-material";
 import SearchBar from "../SearchBar/SearchBar";
 import { Context } from "../../../state/Provider";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../Redux/app/hooks";
 
 
 const Header = () => {
+
+  const cartState = useAppSelector((state) => state.cartState);
 
   const { searchDrawer, setSearchDrawer, } = useContext(Context);
 
@@ -24,10 +27,15 @@ const Header = () => {
     setSearchDrawer(newOpen);
   };
 
+  const totalQuantity = Object.keys(cartState).reduce((total, key) => {
+    const quantity = cartState[key]?.quantity || 0;
+    return total + quantity;
+  }, 0);
+
   const tabBar = [
     { name: "HOME", icon: <AiOutlineHome />, url: "/" },
     { name: "PRODUCTS", icon: <FiShoppingBag />, url: "/products" },
-    { name: "PRODUCT MANAGEMENT", icon: <TfiWrite />, url: "/blog" },
+    { name: "PRODUCT MANAGEMENT", icon: <TfiWrite />, url: "/product_management" },
     { name: "ABOUT US", icon: <InfoIcon />, url: "/about_us" },
   ];
 
@@ -38,7 +46,7 @@ const Header = () => {
 
         <Toolbar className="hidden sm:flex flex-row gap-12 justify-between content-center items-center bg-white">
 
-          <section className="flex gap-1 items-center ">
+          <section onClick={() => navigate('/')} className="flex gap-1 items-center ">
             <Typography className="text-black text-nowrap">My GYM</Typography>
             {/* <img className=" hover:cursor-pointer" src={Logo}  onClick={() => navigate("/")}/> */}
           </section>
@@ -46,11 +54,11 @@ const Header = () => {
           <SearchBar />
 
           <section className="flex gap-8 justify-center content-center items-center">
-            <Badge badgeContent={0} color="secondary" showZero>
+            <Badge badgeContent={totalQuantity} color="secondary" showZero>
               <ShoppingCartOutlined
                 fontSize="large"
                 className="text-rose-900 hover:cursor-pointer"
-                onClick={() => { }}
+                onClick={() => { Object.keys(cartState).length > 0 && navigate('/product_cart') }}
               />
             </Badge>
 
@@ -81,11 +89,11 @@ const Header = () => {
 
 
             <div>
-              <Badge badgeContent={0} color="secondary" className="mt-1" showZero>
+              <Badge badgeContent={totalQuantity} color="secondary" className="mt-1" showZero>
                 <ShoppingCartOutlined
                   sx={{ fontSize: "1.8rem" }}
                   className="text-rose-900"
-                  onClick={() => { }}
+                  onClick={() => { Object.keys(cartState).length > 0 && navigate('/product_cart') }}
                 />
               </Badge>
             </div>
@@ -104,8 +112,8 @@ const Header = () => {
           </section>
         </Toolbar>
 
-        <section className="flex gap-2 bg-gray-700 pl-4 content-center items-center hidden md:block">
-         
+        <section className="flex gap-2 bg-gray-700 pl-4 content-center items-center hidden sm:block">
+
           {tabBar?.map((item, i) => (
             <Button
               key={i}
@@ -127,7 +135,7 @@ const Header = () => {
           </Typography>
         </section>
         <List>
-          
+
           {tabBar?.map((item, i) => (
             <ListItemButton
               onClick={() => [navigate(item?.url), setIsMenu(false)]}

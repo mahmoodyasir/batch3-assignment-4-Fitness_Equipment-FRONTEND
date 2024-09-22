@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { getProductDetails } from '../../ApiGateways/product';
 import { Product } from '../../utils/utils';
-import { Avatar, Button, Divider, Typography } from '@mui/material';
+import { Avatar, Button, ButtonGroup, Divider, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../Redux/app/hooks';
+import { addToCart, increaseCartItem, decreaseCartItem } from '../../Redux/features/productCartSlice';
 
 const ProductDetails = () => {
     const { id } = useParams();
+    const cartState = useAppSelector((state) => state.cartState);
+
+    const dispatch = useAppDispatch();
 
     const [productData, setProductData] = useState<Product>();
     const [inStock, setInStock] = useState<boolean>(false);
@@ -34,13 +39,25 @@ const ProductDetails = () => {
                 setNumFiles(
                     (data?.data?.images?.length || 0)
                 );
-                if (data?.data?.price <= 0) setInStock(false)
+                if (data?.data?.stock_quantity <= 0) setInStock(false)
                 else setInStock(true)
             },
             res => console.log(res)
         )
     }, [id]);
 
+
+    const handleAddToCart = (product: any, quantity: number) => {
+        dispatch(addToCart({ product, quantity }));
+    };
+
+    const handleIncreaseQuantity = (productId: string) => {
+        dispatch(increaseCartItem(productId));
+    };
+
+    const handleDecreaseQuantity = (productId: string) => {
+        dispatch(decreaseCartItem(productId));
+    };
 
     return (
         <main>
@@ -136,9 +153,47 @@ const ProductDetails = () => {
                         </span>
                     </div>
 
+
+                    {/* REDUX CART CONTROL */}
+
+
                     <div className='mt-8'>
-                        <Button className='bg-red-500 text-white opacity-80 hover:bg-green-500'>Add To Cart</Button>
+                        {
+                            inStock && cartState?.hasOwnProperty(String(id)) ?
+                                <>
+                                    <ButtonGroup size="large" color="secondary" aria-label="Medium-sized button group">
+                                        <Button onClick={() => handleDecreaseQuantity(String(productData?._id))} className='bg-red-500 text-white border-0'>-</Button>
+                                        <Button className='bg-white text-black border-0' disabled>{cartState[String(id)]?.quantity}</Button>
+                                        <Button onClick={() => handleIncreaseQuantity(String(productData?._id))} className='bg-green-500 text-white border-0'>+</Button>
+                                    </ButtonGroup>
+                                </>
+                                :
+                                <>
+                                    {
+                                        inStock &&
+                                        <Button size="large" className='bg-red-500 text-white opacity-80 hover:bg-green-500'
+                                            onClick={() => { handleAddToCart(productData, 1) }}
+                                        >
+                                            Add To Cart
+                                        </Button>
+                                    }
+                                </>
+                        }
+
+                        {
+                            !inStock &&
+                            <Button size="large" className='bg-gray-500 text-white opacity-80 hover:bg-green-500 disabled'
+                                disabled
+                            >
+                                Add To Cart
+                            </Button>
+                        }
                     </div>
+
+
+                    {/*  */}
+
+
 
                     <Divider sx={{ borderWidth: "0.1rem", borderColor: "#AAAAAA" }} />
 
@@ -146,28 +201,6 @@ const ProductDetails = () => {
                         {productData?.description}
                     </Typography>
 
-
-
-            
-
-                    {/* {
-                        inStock &&
-                        <section className=" flex flex-col md:flex-row md:items-center flex-wrap gap-4">
-                            <div>
-                                <Button className="  bg-red-500 text-white hover:bg-red-700 border-black bg-opacity-80 py-3 px-3"
-                                    variant="contained"
-                                    onClick={() => buyNow(productData, 1)}
-                                    sx={{
-                                        height: "fit-content",
-                                    }}
-                                >
-                                    Buy Now
-                                </Button>
-                            </div>
-                            <div>{productData && <AddCartButton data={productData} />}</div>
-                        </section>
-
-                    } */}
                 </div>
             </div>
         </main>

@@ -53,7 +53,7 @@ const ProductCard = (props: Props) => {
                         src={
                             item.images.length > 0
                                 ? `${item?.images[0]}`
-                                : "https://i.ibb.co/PrxWFNt/facewash.png"
+                                : "https://i.ibb.co.com/8xBYtXv/depositphotos-247872612-stock-illustration-no-image-available-icon-vector.webp"
                         }
                         alt={item.name}
                         style={{
