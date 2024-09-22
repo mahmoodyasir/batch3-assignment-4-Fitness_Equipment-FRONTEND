@@ -47,7 +47,7 @@ const Header = () => {
         <Toolbar className="hidden sm:flex flex-row gap-12 justify-between content-center items-center bg-white">
 
           <section onClick={() => navigate('/')} className="flex gap-1 items-center ">
-            <Typography className="text-black text-nowrap">My GYM</Typography>
+            <Typography className="text-black text-nowrap font-bold text-3xl cursor-pointer">FitGym</Typography>
             {/* <img className=" hover:cursor-pointer" src={Logo}  onClick={() => navigate("/")}/> */}
           </section>
 
@@ -74,9 +74,9 @@ const Header = () => {
             <AiOutlineMenu />
           </Typography>
 
-          <section className="flex gap-[0.1rem] min-[380px]:gap-1 items-center md:w-[20rem] lg:w-[15rem]">
+          <section onClick={() => navigate('/')} className="flex gap-[0.1rem] min-[380px]:gap-1 items-center md:w-[20rem] lg:w-[15rem]">
             {/* <img src={Logo} className=" hover:cursor-pointer" style={{ maxHeight:50 }} onClick={() => navigate("/")}/> */}
-            <Typography className="text-black text-nowrap">My GYM</Typography>
+            <Typography className="text-black text-nowrap text-2xl font-bold cursor-pointer">FitGym</Typography>
           </section>
           <section className=" flex gap-3 justify-between">
 

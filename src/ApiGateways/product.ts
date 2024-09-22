@@ -80,3 +80,54 @@ export const insertProduct = async (
         handleError(err)
     }
 };
+
+
+export const updateProductData = async (
+    id: string,
+    body: any,
+    handleSuccess: (data?: any) => void,
+    handleError: (err?: any) => void
+) => {
+
+    try {
+        const response = await fetch(`${url}/api/product/update-product/${id}`,
+            {
+                method: 'PUT',
+                body,
+
+            });
+
+        const jsonData = await response.json();
+        if (response.status === 200) handleSuccess(jsonData);
+        else handleError(jsonData);
+    }
+    catch (err) {
+        handleError(err)
+    }
+};
+
+
+export const deleteProductRecord = async (
+    id: string,
+    handleSuccess: (data?: any) => void,
+    handleError: (err?: any) => void
+) => {
+
+    try {
+        const response = await fetch(`${url}/api/product/delete-product/${id}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+
+        const jsonData = await response.json();
+        if (response.status === 200) handleSuccess(jsonData);
+        else handleError(jsonData);
+    }
+    catch (err) {
+        handleError(err)
+    }
+};

@@ -8,11 +8,11 @@ const GenericLayout = () => {
   return (
     <main className="flex flex-col min-h-screen">
       <Header />
-      {/* <CartAlert/> */}
+      <CartAlert />
       <section className="flex-grow">
         <Outlet />
       </section>
-      <Footer/>
+      <Footer />
     </main>
   )
 }

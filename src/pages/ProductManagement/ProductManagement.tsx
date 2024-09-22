@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Product } from '../../utils/utils';
-import { getAllProduct } from '../../ApiGateways/product';
+import { deleteProductRecord, getAllProduct } from '../../ApiGateways/product';
 import { Context } from '../../state/Provider';
-import { Button, TableCell, TableRow } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle, TableCell, TableRow } from '@mui/material';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GenericTable from '../../components/GenericTable/GenericTable';
@@ -16,6 +16,8 @@ export type ProductFormValues = {
     stock_quantity: number;
     category: string;
     images: string[];
+    deletedImages?: string[];
+    featured: boolean;
 };
 
 
@@ -30,7 +32,9 @@ const ProductManagement = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [open, setOpen] = useState(false);
 
+
     const [deleteProductData, setDeleteProductData] = useState({
+        open: false,
         id: "",
         index: 0,
     });
@@ -54,6 +58,7 @@ const ProductManagement = () => {
         stock_quantity: 0,
         category: '',
         images: [],
+        featured: false,
     }
 
     const [formValues, setFormValues] = useState<ProductFormValues>(initialProductFormState);
@@ -135,6 +140,19 @@ const ProductManagement = () => {
     };
 
 
+    const handleDeleteProduct = (id: string, index: number) => {
+        deleteProductRecord(
+            id,
+            (data) => {
+                const temp = [...allProduct];
+                temp.splice(index, 1);
+                setAllProduct(temp);
+            },
+            (res) => console.log(res)
+        );
+    };
+
+
     const createTableRows = (products: Product[]) =>
         products?.map((product: Product, index: number) => (
             <TableRow key={index}>
@@ -157,6 +175,11 @@ const ProductManagement = () => {
                 </TableCell>
                 <TableCell sx={{ textAlign: "center" }}>
                     <Button color="info" onClick={() => {
+                        setDeleteProductData({
+                            open: false,
+                            id: product?._id,
+                            index: index,
+                        });
                         setFormValues(product as any);
                         setOpen(true);
                     }}>
@@ -165,7 +188,11 @@ const ProductManagement = () => {
                     <Button
                         color="error"
                         onClick={() => {
-
+                            setDeleteProductData({
+                                open: true,
+                                id: product?._id,
+                                index: index,
+                            });
                         }}
                     >
                         <DeleteIcon />
@@ -182,13 +209,42 @@ const ProductManagement = () => {
                     <Button onClick={() => { setOpen(true) }} className='bg-green-500 hover:opacity-75 text-white'>Insert Product</Button>
                 </div>
 
+                <Dialog
+                    fullWidth
+                    open={deleteProductData?.open}
+                    onClose={() => setDeleteProductData({ ...deleteProductData, open: false })}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {`Do you want to delete this product ? `}
+                    </DialogTitle>
+
+                    <DialogActions>
+                        <Button onClick={() => setDeleteProductData({ ...deleteProductData, open: false })} variant='outlined' color='error'>No</Button>
+                        <Button onClick={() => {
+                            handleDeleteProduct(deleteProductData?.id, deleteProductData?.index);
+                            setDeleteProductData({
+                                open: false,
+                                id: "",
+                                index: 0,
+                            })
+
+                        }} variant='outlined' color='success'>Yes</Button>
+                    </DialogActions>
+                </Dialog>
+
                 <ProductFormDialog
                     open={open}
                     onClose={() => {
                         setOpen(false);
                         setFormValues(initialProductFormState);
                     }}
-                    updateProduct={() => { }}
+                    updateProduct={(data) => {
+                        const temp = [...allProduct];
+                        temp.splice(deleteProductData?.index, 1);
+                        setAllProduct([data, ...temp])
+                    }}
                     createProduct={(data) => {
                         setAllProduct([data, ...allProduct]);
                     }}

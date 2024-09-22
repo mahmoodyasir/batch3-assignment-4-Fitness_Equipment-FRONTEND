@@ -6,7 +6,11 @@ export default {
   ],
   important: "#root",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        alegreya: ['Alegreya', 'serif'],
+      }
+    },
   },
   plugins: [],
 }

@@ -9,13 +9,16 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    FormControl
+    FormControl,
+    FormGroup,
+    FormControlLabel,
+    Checkbox
 } from '@mui/material';
 import { ProductFormValues } from '../ProductManagement/ProductManagement';
 import { Product } from '../../utils/utils';
 import UploadIcon from '@mui/icons-material/Upload';
 import FileUploader from '../../components/FileUploader/FileUploader';
-import { insertProduct } from '../../ApiGateways/product';
+import { insertProduct, updateProductData } from '../../ApiGateways/product';
 
 
 type ProductFormTDialogType = {
@@ -71,15 +74,26 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
         formData.append('description', formValues.description);
         formData.append('stock_quantity', formValues.stock_quantity.toString());
         formData.append('category', formValues.category);
+        formData.append('featured', formValues?.featured ? formValues.featured.toString() : 'false');
+
+        if (formValues?._id && formValues?.deletedImages && formValues?.deletedImages?.length > 0) {
+            formData.append('deletedImages', JSON.stringify(formValues?.deletedImages))
+        }
 
         submitImages.map((image, idx) => formData.append(`images`, image));
 
-        // formData.forEach((value, key) => {
-        //     console.log(`${key}:`, value);
-        // });
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
 
         if (formValues?._id) {
-
+            updateProductData(formValues?._id, formData,
+                (data) => {
+                    updateProduct(data?.data);
+                    handleClose();
+                },
+                (res) => console.log(res)
+            )
         }
         else {
             insertProduct(formData,
@@ -92,11 +106,12 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
         }
     };
 
+
     return (
         <>
 
             <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                <DialogTitle>Add New Product</DialogTitle>
+                <DialogTitle>{formValues?._id ? 'Update The Product' : 'Add New Product'}</DialogTitle>
                 <DialogContent>
                     {/* Product Name */}
                     <TextField
@@ -164,6 +179,15 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
                         </Select>
                     </FormControl>
 
+                    <FormGroup>
+                        <FormControlLabel required control={
+                            <Checkbox
+                                checked={formValues?.featured}
+                                onChange={() => setFormValues({ ...formValues, featured: !formValues?.featured })}
+                            />
+                        } label="Featured" />
+                    </FormGroup>
+
                     {/* Image Upload */}
                     <FileUploader
                         style={{
@@ -175,14 +199,21 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
                         fileType="images"
                         names={formValues.images}
                         removeName={(name) => {
-                            console.log(name)
+
+                            const deletedImages = formValues.deletedImages || [];
+                            if (!deletedImages.includes(name)) {
+                                deletedImages.push(name);
+                            }
+
                             setFormValues({
                                 ...formValues,
                                 images: formValues.images.filter((image) => image !== name),
+                                deletedImages,
                             });
                         }}
                         onFileSelect={(files) => setImages(files)}
                     />
+
                 </DialogContent>
 
                 {/* Dialog Actions */}
@@ -191,7 +222,7 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
                         Cancel
                     </Button>
                     <Button variant='outlined' onClick={handleSubmit} color="primary">
-                        Submit
+                        {formValues?._id ? 'Update' : 'Submit'}
                     </Button>
                 </DialogActions>
             </Dialog>

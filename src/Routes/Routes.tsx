@@ -7,41 +7,42 @@ import ProductCart from "../pages/ProductCart/ProductCart";
 import Checkout from "../pages/Checkout/Checkout";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import ProductManagement from "../pages/ProductManagement/ProductManagement";
+import ScrollToTop from "./ScrollToTop";
 
 
 const router = createBrowserRouter([
 
     {
         path: "/",
-        element: <GenericLayout/>,
+        element: <ScrollToTop><GenericLayout /></ScrollToTop>,
         children: [
             {
                 path: "/",
-                element: <Home/>
+                element: <Home />
             },
             {
                 path: "/products",
-                element: <Products/>
+                element: <Products />
             },
             {
                 path: "/product_details/:id",
-                element: <ProductDetails/>
+                element: <ProductDetails />
             },
             {
                 path: "/product_cart",
-                element: <ProductCart/>
+                element: <ProductCart />
             },
             {
                 path: "/checkout",
-                element: <Checkout/>
+                element: <Checkout />
             },
             {
                 path: "/about_us",
-                element: <AboutUs/>
+                element: <AboutUs />
             },
             {
                 path: "/product_management",
-                element: <ProductManagement/>
+                element: <ProductManagement />
             },
         ]
     },
