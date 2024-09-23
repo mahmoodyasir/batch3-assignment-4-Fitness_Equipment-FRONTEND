@@ -90,7 +90,7 @@ const ProductManagement = () => {
 
 
     const handleChangePage = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+        _event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
         newPage: number
     ) => {
         getAllProduct(newPage + 1, rowsPerPage, false, filters,
@@ -144,9 +144,11 @@ const ProductManagement = () => {
         deleteProductRecord(
             id,
             (data) => {
-                const temp = [...allProduct];
-                temp.splice(index, 1);
-                setAllProduct(temp);
+                if (data?.success === true) {
+                    const temp = [...allProduct];
+                    temp.splice(index, 1);
+                    setAllProduct(temp);
+                }
             },
             (res) => console.log(res)
         );

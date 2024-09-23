@@ -1,6 +1,6 @@
 import { Button, Checkbox, Drawer, FormControlLabel, FormGroup, Pagination, Slider, TextField, Typography } from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
-import { filterTypes, ITEM_PER_PAGE, MAX_PRICE_LIMIT, noNegative } from '../../utils/utils';
+import { useContext, useEffect, useState } from 'react'
+import { ITEM_PER_PAGE, MAX_PRICE_LIMIT, noNegative } from '../../utils/utils';
 import Radio from '@mui/material/Radio';
 import { getAllProduct } from '../../ApiGateways/product';
 import { useAppDispatch, useAppSelector } from '../../Redux/app/hooks';
@@ -12,12 +12,12 @@ import { Context } from '../../state/Provider';
 const FilterTab = () => {
 
   const { filters, setFilters } = useContext(Context);
-  
+
 
   const categories = ["cable machines", "dumbbells", "elliptical", "treadmill", "barbell", "bench"];
 
 
-  const handlePriceRangeChange = (event: Event, newValue: number | number[]) => {
+  const handlePriceRangeChange = (_event: Event, newValue: number | number[]) => {
     if (Array.isArray(newValue)) {
 
       setFilters({ ...filters, minPrice: newValue[0], maxPrice: newValue[1] })
@@ -198,10 +198,9 @@ const Products = () => {
   const all_products = useAppSelector((state) => state.productState);
   const [debounceTimeout, setDebounceTimeout] = useState<number>();
 
-  const { filters, setFilters } = useContext(Context);
+  const { filters } = useContext(Context);
 
   const [openFilter, setOpenFilter] = useState(false);
-  const [reset, setReset] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
@@ -229,7 +228,7 @@ const Products = () => {
       clearTimeout(timeoutId);
     };
 
-    
+
   }, [page, filters]);
 
 
@@ -252,7 +251,7 @@ const Products = () => {
             }
           }}
         >
-          <FilterTab/>
+          <FilterTab />
         </Drawer>
 
         <article className="hidden lg:block col-span-1 row-span-4" >
@@ -269,7 +268,7 @@ const Products = () => {
             ))}
           </section>
 
-          <Pagination count={totalPage} page={page} onChange={(event: any, value: number) => { setPage(value) }}
+          <Pagination count={totalPage} page={page} onChange={(_event: any, value: number) => { setPage(value) }}
             sx={{
               "li > button": {
                 backgroundColor: "#73555f",

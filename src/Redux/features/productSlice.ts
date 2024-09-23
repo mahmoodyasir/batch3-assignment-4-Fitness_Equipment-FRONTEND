@@ -20,7 +20,7 @@ const productSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        setProducts: (state, action: PayloadAction<ProductResponse>) => {
+        setProducts: (_state, action: PayloadAction<ProductResponse>) => {
             return action.payload;
         }
     }

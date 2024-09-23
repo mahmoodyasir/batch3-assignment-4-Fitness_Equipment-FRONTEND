@@ -1,6 +1,6 @@
-import { Email, Phone } from '@mui/icons-material';
-import { Backdrop, Button, CircularProgress, InputAdornment, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Email } from '@mui/icons-material';
+import { Button, InputAdornment, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -8,8 +8,6 @@ const Footer = () => {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-
 
 
   return (

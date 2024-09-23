@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Dialog,
@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { ProductFormValues } from '../ProductManagement/ProductManagement';
 import { Product } from '../../utils/utils';
-import UploadIcon from '@mui/icons-material/Upload';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { insertProduct, updateProductData } from '../../ApiGateways/product';
 
@@ -34,9 +33,7 @@ type ProductFormTDialogType = {
 const categories = ["cable machines", "dumbbells", "elliptical", "treadmill", "barbell", "bench"];
 
 const ProductFormDialog = (props: ProductFormTDialogType) => {
-    const { open, formValues, setFormValues, onClose, updateProduct, createProduct, initialFormState } = props;
-
-    const [fileNames, setFileNames] = useState<string[]>([]);
+    const { open, formValues, setFormValues, onClose, updateProduct, createProduct } = props;
 
     const [images, setImages] = useState<any[]>([]);
 
@@ -80,7 +77,7 @@ const ProductFormDialog = (props: ProductFormTDialogType) => {
             formData.append('deletedImages', JSON.stringify(formValues?.deletedImages))
         }
 
-        submitImages.map((image, idx) => formData.append(`images`, image));
+        submitImages.map((image, _idx) => formData.append(`images`, image));
 
         formData.forEach((value, key) => {
             console.log(`${key}:`, value);

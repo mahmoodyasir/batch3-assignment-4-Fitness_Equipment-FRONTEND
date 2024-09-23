@@ -68,7 +68,7 @@ const SearchBar = () => {
         options={searchResults}
         fullWidth
         freeSolo
-        onChange={(event, newValue: any) => {
+        onChange={(_event, newValue: any) => {
           setRetrieved(newValue?.name);
           newValue?._id && navigate(`/product_details/${newValue?._id}`);
           // newValue?.id === '' && searchByCategory(newValue?.name);

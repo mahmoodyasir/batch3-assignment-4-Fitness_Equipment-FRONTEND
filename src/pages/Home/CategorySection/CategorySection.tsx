@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import barbell from '../../../static/img/barbell.png'
 import bench from '../../../static/img/bench.png'
 import dumbbells from '../../../static/img/dumbbells.png'

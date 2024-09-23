@@ -69,7 +69,7 @@ const Banner: React.FC<BannerProps> = ({items}) => {
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="flex transition-transform duration-500 delay-150" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          {items.map(({ imgUrl, path }, index) => (
+          {items.map(({ imgUrl }, index) => (
             <div key={index} className="min-w-full">
               <img
                 src={imgUrl}
