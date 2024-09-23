@@ -11,6 +11,7 @@ import SearchBar from "../SearchBar/SearchBar";
 import { Context } from "../../../state/Provider";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../Redux/app/hooks";
+import logo from '../../../static/img/logo.png' 
 
 
 const Header = () => {
@@ -47,8 +48,9 @@ const Header = () => {
         <Toolbar className="hidden sm:flex flex-row gap-12 justify-between content-center items-center bg-white">
 
           <section onClick={() => navigate('/')} className="flex gap-1 items-center ">
+            <img className="w-10 h-10" src={logo} alt="FitGym logo" />
             <Typography className="text-black text-nowrap font-bold text-3xl cursor-pointer">FitGym</Typography>
-            {/* <img className=" hover:cursor-pointer" src={Logo}  onClick={() => navigate("/")}/> */}
+            
           </section>
 
           <SearchBar />
@@ -75,7 +77,7 @@ const Header = () => {
           </Typography>
 
           <section onClick={() => navigate('/')} className="flex gap-[0.1rem] min-[380px]:gap-1 items-center md:w-[20rem] lg:w-[15rem]">
-            {/* <img src={Logo} className=" hover:cursor-pointer" style={{ maxHeight:50 }} onClick={() => navigate("/")}/> */}
+          <img className="w-8 h-8" src={logo} alt="FitGym logo" />
             <Typography className="text-black text-nowrap text-2xl font-bold cursor-pointer">FitGym</Typography>
           </section>
           <section className=" flex gap-3 justify-between">
