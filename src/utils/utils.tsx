@@ -1,5 +1,5 @@
 export const MAX_PRICE_LIMIT = 100000;
-export const ITEM_PER_PAGE = 6;
+export const ITEM_PER_PAGE = 12;
 
 
 type timaStampTypes = {
